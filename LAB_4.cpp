@@ -9,7 +9,7 @@ using namespace std;
 
 
 
-int countNum(int n)
+int countNum(unsigned long long n)
 {
 	int count = 0;
 	if (n == 0)
@@ -21,7 +21,7 @@ int countNum(int n)
 	}
 	return count;
 }
-int minNum(int n)
+int minNum(unsigned long long n)
 {
 	int minN = n % 10, m;
 	while (n > 0)
@@ -36,32 +36,65 @@ int minNum(int n)
 	}
 	return minN;
 }
+int searchZero(unsigned long long n)
+{
+	int count = 0;
+	if (n == 0)
+		return 0;
+	while (n > 0)
+	{
+		if (n % 10 == 0)
+		{
+			count++;
+		}
+		n = n / 10;	
+	}
+	return count;
+}
 
 void main()
 {
 	setlocale(LC_ALL, "RUS");
-	int n, c, nw=0,N,MIN;
-	cout << "Enter a number ";
-	cin >> n;
+	unsigned long long n, nw = 0,N;
+	int c ,MIN, countN, count0;
+	/*cout << "Enter a number ";
+	cin >> n;*/
+	n = 22222222202221;// 
 	c = countNum(n);
+	count0 = searchZero(n);
 	
 	for (int i = 0; i < c; i++)
 	{
-		MIN = minNum(n);
-		nw = nw * 10 + MIN;
+		countN = 0;
 		N = 0;
+		MIN = minNum(n);
+		if (nw > 0 && count0 > 0) // Добавляем числу 0
+		{
+			nw = nw * pow(10, count0);
+			count0 = 0;
+		}
+		nw = nw * 10 + MIN;
 
 		while (n > 0)
-		{ 
-			if (n % 10 != MIN)
+		{
+			if (n % 10 != MIN) // Запись в новое число, если != MIN
+			{
+				N = N * 10 + n % 10;
+			}
+			else if (countN == 0 && n % 10 == MIN) // Изменение в счётчике
+			{
+				countN++; // Нужен для записи одинаковых цифр
+			}
+			else if (countN > 0 && n % 10 == MIN) // Запись в новое число, если == MIN
 			{
 				N = N * 10 + n % 10;
 			}
 			n = n / 10;
 		}
+	
 		n = N;
 	}
-	cout << nw;
+	std:: cout << nw;
 }
 
 
